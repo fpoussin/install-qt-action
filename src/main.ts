@@ -31,6 +31,7 @@ async function run() {
         const mirror = core.getInput("mirror");
         const extra = core.getInput("extra");
         const modules = core.getInput("modules");
+        const tools = core.getInput("tools");
 
         //set host automatically if omitted
         if (!host) {
@@ -96,6 +97,12 @@ async function run() {
 
         //run aqtinstall with args
         await exec.exec(`${pythonName} -m aqt install`, args);
+          
+        if (tools) {
+          tools.forEach(function(tool) {
+            await exec.exec(`${pythonName} -m aqt tool`, `-O ${dir} ${host} tools_${tool.name} ${tool.version} ${arch}`);
+          });
+       }
       }
 
       //set environment variables
